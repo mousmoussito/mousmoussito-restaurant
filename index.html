@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mousmoussito Restaurant — Restaurant à domicile</title>
+<style>
+:root{
+  --bg:#f7f1e8;--card:#fffdf9;--ink:#29251f;--muted:#746b60;
+  --accent:#8d4b35;--accent2:#c89b5b;--line:#e7dccb;--green:#536b50;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif}
+header{
+  min-height:330px;padding:65px 20px 50px;text-align:center;color:white;
+  background:linear-gradient(135deg,#3b2b25,#8d4b35 55%,#b47b45);
+  position:relative;overflow:hidden
+}
+header:after{content:"";position:absolute;width:420px;height:420px;border:1px solid rgba(255,255,255,.18);border-radius:50%;top:-230px;right:-100px}
+.logo{font-size:15px;letter-spacing:4px;text-transform:uppercase;opacity:.85}
+h1{font-size:clamp(42px,9vw,76px);margin:18px 0 8px;font-weight:500}
+.subtitle{font-size:20px;font-style:italic;opacity:.9}
+.badge{display:inline-block;margin-top:25px;padding:9px 16px;border:1px solid rgba(255,255,255,.4);border-radius:99px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px}
+main{max-width:1050px;margin:auto;padding:35px 18px 100px}
+.intro{text-align:center;max-width:650px;margin:0 auto 35px}
+.intro h2{font-size:30px;margin-bottom:8px}
+.intro p{color:var(--muted);font-family:Arial,sans-serif;line-height:1.6}
+section{margin:38px 0}
+.section-title{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+.section-title h2{margin:0;font-size:28px}
+.line{height:1px;background:var(--line);flex:1}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.item{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;
+  cursor:pointer;transition:.18s;position:relative
+}
+.item:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(60,40,20,.08)}
+.item.selected{border:2px solid var(--accent);padding:19px;background:#fff8ef}
+.item.selected:after{content:"✓";position:absolute;right:15px;top:15px;background:var(--accent);color:#fff;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-family:Arial}
+.item-top{display:flex;gap:14px;align-items:flex-start}
+.emoji{font-size:36px}
+.item h3{margin:2px 0 6px;font-size:20px}
+.item p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.price{margin-left:auto;font-family:Arial;font-weight:bold;white-space:nowrap;color:var(--accent)}
+.choice{margin-top:12px;font-family:Arial;font-size:12px;color:var(--muted)}
+.note{background:#eee5d7;border-radius:18px;padding:18px;font-family:Arial;color:#5f564d;font-size:14px;line-height:1.5}
+.order{
+  position:sticky;bottom:12px;background:rgba(255,253,249,.96);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 12px 40px rgba(50,30,15,.14)
+}
+.order-row{display:flex;justify-content:space-between;gap:15px;align-items:center}
+.order strong{font-size:18px}
+#summary{font-family:Arial;color:var(--muted);font-size:13px;margin-top:6px}
+button{
+  border:0;background:var(--accent);color:white;padding:14px 20px;border-radius:13px;
+  font-weight:bold;cursor:pointer;font-size:15px
+}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.modal{position:fixed;inset:0;background:rgba(30,20,15,.65);display:none;place-items:center;padding:18px;z-index:10}
+.modal.show{display:grid}
+.modal-card{background:var(--card);max-width:520px;width:100%;border-radius:25px;padding:30px;text-align:center}
+.modal-card .big{font-size:54px}
+.modal-card h2{font-size:30px;margin:10px 0}
+.confirmation{background:#f2eadf;border-radius:15px;padding:15px;text-align:left;font-family:Arial;font-size:14px;line-height:1.7;margin:20px 0}
+footer{text-align:center;padding:0 20px 45px;color:var(--muted);font-family:Arial;font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.order-row{align-items:stretch;flex-direction:column}.order button{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Restaurant privé · fait maison</div>
+  <h1>Mousmoussito Restaurant</h1>
+  <div class="subtitle">La cuisine du chef, rien que pour toi ❤️</div>
+  <div class="badge">MENU DU SOIR</div>
+</header>
+
+<main>
+  <div class="intro">
+    <h2>Bienvenue à table</h2>
+    <p>Installe-toi confortablement, choisis ce qui te fait envie et laisse le chef s'occuper du reste. Toutes les suggestions sont préparées avec amour.</p>
+  </div>
+
+  <div class="note">💡 <strong>Comment ça marche ?</strong> Choisis une entrée, un plat et un dessert. Tu peux aussi choisir une boisson. Quand tu as terminé, clique sur « Passer la commande ».</div>
+
+  <section>
+    <div class="section-title"><h2>🥗 Entrées</h2><div class="line"></div></div>
+    <div class="grid">
+      <div class="item" data-group="entree" data-name="Salade gourmande" data-price="6">
+        <div class="item-top"><span class="emoji">🥗</span><div><h3>Salade gourmande</h3><p>Salade fraîche, tomates, croûtons, fromage et petite sauce maison.</p></div><span class="price">6 €</span></div>
+      </div>
+      <div class="item" data-group="entree" data-name="Œuf cocotte" data-price="7">
+        <div class="item-top"><span class="emoji">🍳</span><div><h3>Œuf cocotte</h3><p>Œuf fondant, crème et petites touches gourmandes du chef.</p></div><span class="price">7 €</span></div>
+      </div>
+      <div class="item" data-group="entree" data-name="Planche apéro" data-price="8">
+        <div class="item-top"><span class="emoji">🧀</span><div><h3>Planche apéro</h3><p>Fromage, charcuterie et petites gourmandises à partager.</p></div><span class="price">8 €</span></div>
+      </div>
+      <div class="item" data-group="entree" data-name="Velouté du chef" data-price="6">
+        <div class="item-top"><span class="emoji">🍲</span><div><h3>Velouté du chef</h3><p>Soupe de saison onctueuse, croûtons croustillants.</p></div><span class="price">6 €</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>🍽️ Plats</h2><div class="line"></div></div>
+    <div class="grid">
+      <div class="item" data-group="plat" data-name="Viande sauce maison" data-price="14">
+        <div class="item-top"><span class="emoji">🥩</span><div><h3>Viande sauce maison</h3><p>Viande cuite selon ton envie, accompagnement du jour et sauce du chef.</p></div><span class="price">14 €</span></div>
+      </div>
+      <div class="item" data-group="plat" data-name="Poisson du jour" data-price="15">
+        <div class="item-top"><span class="emoji">🐟</span><div><h3>Poisson du jour</h3><p>Poisson fondant, légumes de saison et accompagnement maison.</p></div><span class="price">15 €</span></div>
+      </div>
+      <div class="item" data-group="plat" data-name="Pâtes crémeuses" data-price="12">
+        <div class="item-top"><span class="emoji">🍝</span><div><h3>Pâtes crémeuses</h3><p>Pâtes généreuses, sauce crémeuse et parmesan.</p></div><span class="price">12 €</span></div>
+      </div>
+      <div class="item" data-group="plat" data-name="Burger maison" data-price="13">
+        <div class="item-top"><span class="emoji">🍔</span><div><h3>Burger maison</h3><p>Pain moelleux, steak, fromage, sauce maison et pommes de terre.</p></div><span class="price">13 €</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>🍰 Desserts</h2><div class="line"></div></div>
+    <div class="grid">
+      <div class="item" data-group="dessert" data-name="Fondant au chocolat" data-price="6">
+        <div class="item-top"><span class="emoji">🍫</span><div><h3>Fondant au chocolat</h3><p>Chocolat intense, cœur coulant et petite touche gourmande.</p></div><span class="price">6 €</span></div>
+      </div>
+      <div class="item" data-group="dessert" data-name="Dessert surprise" data-price="6">
+        <div class="item-top"><span class="emoji">🎁</span><div><h3>Dessert surprise</h3><p>Le chef choisit pour toi. Promis, ça reste une surprise.</p></div><span class="price">6 €</span></div>
+      </div>
+      <div class="item" data-group="dessert" data-name="Glace gourmande" data-price="5">
+        <div class="item-top"><span class="emoji">🍨</span><div><h3>Glace gourmande</h3><p>Deux boules au choix avec une petite gourmandise.</p></div><span class="price">5 €</span></div>
+      </div>
+      <div class="item" data-group="dessert" data-name="Crêpes maison" data-price="6">
+        <div class="item-top"><span class="emoji">🥞</span><div><h3>Crêpes maison</h3><p>Crêpes moelleuses, sucre, chocolat ou confiture.</p></div><span class="price">6 €</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>🥤 Boissons</h2><div class="line"></div></div>
+    <div class="grid">
+      <div class="item" data-group="boisson" data-name="Boisson fraîche" data-price="2">
+        <div class="item-top"><span class="emoji">🥤</span><div><h3>Boisson fraîche</h3><p>Au choix parmi les boissons disponibles.</p></div><span class="price">2 €</span></div>
+      </div>
+      <div class="item" data-group="boisson" data-name="Eau pétillante" data-price="1">
+        <div class="item-top"><span class="emoji">💧</span><div><h3>Eau pétillante</h3><p>Bien fraîche, évidemment.</p></div><span class="price">1 €</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="order">
+    <div class="order-row">
+      <div>
+        <strong>🧾 Ta commande</strong>
+        <div id="summary">Choisis au moins un plat pour commencer…</div>
+        <div id="total" style="font-family:Arial;font-weight:bold;margin-top:7px">Total : 0 €</div>
+      </div>
+      <button id="orderBtn" disabled>Envoyer la commande au chef ❤️</button>
+    </div>
+  </div>
+</main>
+
+<footer>Mousmoussito Restaurant · Restaurant imaginaire · Cuisine avec amour ❤️</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="big">👨‍🍳❤️</div>
+    <h2>Commande reçue !</h2>
+    <p>Merci pour ta commande. Le chef se met aux fourneaux.</p>
+    <div class="confirmation" id="confirmation"></div>
+    <button onclick="closeModal()">Fermer</button>
+  </div>
+</div>
+
+<script>
+const selected = {};
+document.querySelectorAll('.item').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const group=card.dataset.group;
+    document.querySelectorAll(`.item[data-group="${group}"]`).forEach(x=>x.classList.remove('selected'));
+    card.classList.add('selected');
+    selected[group]={name:card.dataset.name,price:Number(card.dataset.price)};
+    update();
+  });
+});
+function update(){
+  const labels={entree:'Entrée',plat:'Plat',dessert:'Dessert',boisson:'Boisson'};
+  const parts=Object.entries(selected).map(([g,v])=>`${labels[g]} : ${v.name}`);
+  const total=Object.values(selected).reduce((s,v)=>s+v.price,0);
+  document.getElementById('summary').textContent=parts.length?parts.join(' · '):'Choisis au moins un plat pour commencer…';
+  document.getElementById('total').textContent=`Total : ${total} €`;
+  document.getElementById('orderBtn').disabled=!selected.plat;
+}
+document.getElementById('orderBtn').addEventListener('click',()=>{
+  const labels={entree:'Entrée',plat:'Plat',dessert:'Dessert',boisson:'Boisson'};
+  const rows=Object.entries(selected).map(([g,v])=>`${labels[g]} : ${v.name} — ${v.price} €`);
+  const total=Object.values(selected).reduce((s,v)=>s+v.price,0);
+  const body = `Bonjour Chef !\n\nVoici ma commande au Mousmoussito Restaurant :\n\n${rows.join('\n')}\n\nTotal : ${total} €\n\nÀ bientôt ❤️`;
+  const subject = 'Commande — Mousmoussito Restaurant';
+  window.location.href = `mailto:mousmoussito@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  document.getElementById('confirmation').innerHTML=rows.map(x=>x.replace(' : ',' : ')).join('<br>')+`<hr><strong>Total : ${total} €</strong>`;
+  document.getElementById('modal').classList.add('show');
+});
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+</script>
+</body>
+</html>
