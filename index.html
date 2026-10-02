@@ -133,7 +133,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
 @keyframes openRing{50%{transform:scale(1.12);opacity:.45}}
 
 /* ===== CHOIX DU MODE ===== */
-#serviceChoice{position:fixed;inset:0;z-index:9998;display:none;place-items:center;padding:24px;color:#fff;text-align:center;background:linear-gradient(135deg,#3b2b25,#8d4b35 55%,#b47b45)}
+#serviceChoice{pointer-events:auto;cursor:default;position:fixed;inset:0;z-index:9998;display:none;place-items:center;padding:24px;color:#fff;text-align:center;background:linear-gradient(135deg,#3b2b25,#8d4b35 55%,#b47b45)}
 #serviceChoice.show{display:grid;animation:choiceIn .55s ease both}
 .service-box{width:min(760px,100%);padding:20px}
 .service-small{font-family:Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.8}
@@ -147,6 +147,23 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
 .service-description{display:block;margin-top:6px;font-family:Arial,sans-serif;font-size:12px;opacity:.75}
 @keyframes choiceIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
 @media(max-width:650px){.service-options{grid-template-columns:1fr}.service-option{padding:19px}}
+
+
+body.waiting-for-mode header,
+body.waiting-for-mode main,
+body.waiting-for-mode footer {
+  visibility:hidden;
+}
+body.menu-ready header,
+body.menu-ready main,
+body.menu-ready footer {
+  visibility:visible;
+  animation:menuReveal .6s ease both;
+}
+@keyframes menuReveal {
+  from { opacity:0; transform:translateY(14px); }
+  to { opacity:1; transform:translateY(0); }
+}
 
 </style>
 </head>
@@ -175,6 +192,8 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
 </div>
 
 
+</div>
+
 <header>
   <div class="logo">Restaurant privé · fait maison</div>
   <h1>Mousmoussito Restaurant</h1>
@@ -182,36 +201,40 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
   <div class="badge">MENU DU SOIR</div>
 </header>
 
+
+</div>
+
 <main>
   <div class="intro">
     <h2>Bienvenue à table</h2>
     <p>Installe-toi confortablement, choisis ce qui te fait envie et laisse le chef s'occuper du reste. Toutes les suggestions sont préparées avec amour.</p>
   </div>
 
-  <div class="menu-tabs" role="tablist" aria-label="Mode de repas">
-    <button class="menu-tab active" data-tab="emporter" role="tab">🥡 À emporter</button>
-    <button class="menu-tab" data-tab="surplace" role="tab">🍽️ Sur place</button>
-    <button class="menu-tab" data-tab="sortie" role="tab">🚗 Sortie</button>
-  </div>
+  
+<div class="menu-tabs" role="tablist" aria-label="Mode de repas">
+<button class="menu-tab active" data-tab="emporter" role="tab">🥡 À emporter</button>
+<button class="menu-tab" data-tab="surplace" role="tab">🍽️ Sur place</button>
+<button class="menu-tab" data-tab="sortie" role="tab">🚗 Sortie</button>
+</div>
 
-  <div class="note">💡 <strong>Choisis ton mode :</strong> chaque onglet aura son propre menu. Tu peux sélectionner un seul article ou plusieurs.</div>
+<div class="note">💡 <strong>Choisis ton mode :</strong> chaque onglet aura son propre menu. Tu peux sélectionner un seul article ou plusieurs.</div>
 
-  <section class="menu-panel active" data-panel="emporter">
-    <div class="section-title"><h2>🥡 À emporter</h2><div class="line"></div></div>
-    <div class="mode-placeholder"><div class="mode-placeholder-icon">🥡</div><h3>Menu à emporter</h3><p>Le menu spécifique à l'emporter sera ajouté ici.</p></div>
-  </section>
+<section class="menu-panel active" data-panel="emporter">
+<div class="section-title"><h2>🥡 À emporter</h2><div class="line"></div></div>
+<div class="mode-placeholder"><div class="mode-placeholder-icon">🥡</div><h3>Menu à emporter</h3><p>Le menu spécifique à l'emporter sera ajouté ici.</p></div>
+</section>
 
-  <section class="menu-panel" data-panel="surplace">
-    <div class="section-title"><h2>🍽️ Sur place</h2><div class="line"></div></div>
-    <div class="mode-placeholder"><div class="mode-placeholder-icon">🍽️</div><h3>Menu sur place</h3><p>Le menu spécifique au sur place sera ajouté ici.</p></div>
-  </section>
+<section class="menu-panel" data-panel="surplace">
+<div class="section-title"><h2>🍽️ Sur place</h2><div class="line"></div></div>
+<div class="mode-placeholder"><div class="mode-placeholder-icon">🍽️</div><h3>Menu sur place</h3><p>Le menu spécifique au sur place sera ajouté ici.</p></div>
+</section>
 
-  <section class="menu-panel" data-panel="sortie">
-    <div class="section-title"><h2>🚗 Sortie</h2><div class="line"></div></div>
-    <div class="mode-placeholder"><div class="mode-placeholder-icon">🚗</div><h3>Menu sortie</h3><p>Le menu spécifique aux sorties sera ajouté ici.</p></div>
-  </section>
+<section class="menu-panel" data-panel="sortie">
+<div class="section-title"><h2>🚗 Sortie</h2><div class="line"></div></div>
+<div class="mode-placeholder"><div class="mode-placeholder-icon">🚗</div><h3>Menu sortie</h3><p>Le menu spécifique aux sorties sera ajouté ici.</p></div>
+</section>
 
-  <div class="order">
+<div class="order">
     <div class="order-row">
       <div>
         <strong>🧾 Ta commande</strong>
@@ -236,6 +259,8 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
 </div>
 
 <script>
+document.body.classList.add('waiting-for-mode');
+
 let serviceType = '';
 const openingScreen = document.getElementById('opening');
 const serviceScreen = document.getElementById('serviceChoice');
@@ -257,56 +282,54 @@ document.querySelectorAll('.service-option').forEach(option => {
     serviceScreen.style.opacity = '0';
     setTimeout(() => {
       serviceScreen.remove();
+      document.body.classList.remove('waiting-for-mode');
       document.body.classList.add('menu-ready');
     }, 450);
   });
 });
 
-const selected=[];
+const selected=[]; let serviceType='';
 
-document.querySelectorAll('.menu-tab').forEach(tab => tab.addEventListener('click', () => {
-  document.querySelectorAll('.menu-tab').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('.menu-panel').forEach(x => x.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelector(`.menu-panel[data-panel="${tab.dataset.tab}"]`).classList.add('active');
-}));
+document.querySelectorAll('.service-option').forEach(btn=>btn.addEventListener('click',()=>{serviceType=btn.dataset.service;document.getElementById('serviceChoice').classList.remove('show');}));
+setTimeout(()=>{const o=document.getElementById('opening');if(o)o.style.display='none';const c=document.getElementById('serviceChoice');if(c)c.classList.add('show');},8000);
 
-document.querySelectorAll('.item').forEach(card => card.addEventListener('click', () => {
-  const item = { group: card.dataset.group, name: card.dataset.name, price: Number(card.dataset.price) };
-  const i = selected.findIndex(x => x.group === item.group && x.name === item.name);
-  if (i >= 0) {
-    selected.splice(i, 1);
-    card.classList.remove('selected');
-  } else {
-    selected.push(item);
-    card.classList.add('selected');
-  }
-  update();
-}));
+document.querySelectorAll('.menu-tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.menu-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.menu-panel').forEach(x=>x.classList.remove('active'));tab.classList.add('active');document.querySelector(`.menu-panel[data-panel="${tab.dataset.tab}"]`).classList.add('active');}));
 
-function update(){
-  const labels = { entree:'Entrée', plat:'Plat', dessert:'Dessert', boisson:'Boisson' };
-  const parts = selected.map(v => `${labels[v.group]} : ${v.name}`);
-  const total = selected.reduce((a, v) => a + v.price, 0);
-  document.getElementById('summary').textContent = parts.length ? parts.join(' · ') : 'Choisis ce qui te fait envie…';
-  document.getElementById('total').textContent = `Total : ${total} €`;
-  document.getElementById('orderBtn').disabled = !selected.length;
-}
+document.querySelectorAll('.item').forEach(card=>card.addEventListener('click',()=>{const item={group:card.dataset.group,name:card.dataset.name,price:Number(card.dataset.price)};const i=selected.findIndex(x=>x.group===item.group&&x.name===item.name);if(i>=0){selected.splice(i,1);card.classList.remove('selected')}else{selected.push(item);card.classList.add('selected')}update();}));
+function update(){const labels={entree:'Entrée',plat:'Plat',dessert:'Dessert',boisson:'Boisson'};const parts=selected.map(v=>`${labels[v.group]} : ${v.name}`);const total=selected.reduce((a,v)=>a+v.price,0);document.getElementById('summary').textContent=parts.length?parts.join(' · '):'Choisis ce qui te fait envie…';document.getElementById('total').textContent=`Total : ${total} €`;document.getElementById('orderBtn').disabled=!selected.length;}
 
-document.getElementById('orderBtn').addEventListener('click', () => {
-  if (!selected.length) return;
-  const labels = { entree:'Entrée', plat:'Plat', dessert:'Dessert', boisson:'Boisson' };
-  const rows = selected.map(v => `${labels[v.group]} : ${v.name} — ${v.price} €`);
-  const total = selected.reduce((a, v) => a + v.price, 0);
-  const body = `Bonjour Chef !\n\nVoici ma commande au Mousmoussito Restaurant :\n\nMode : ${serviceType}\n\n${rows.join('\n')}\n\nTotal : ${total} €\n\nÀ bientôt ❤️`;
-  const subject = 'Commande — Mousmoussito Restaurant';
-  document.getElementById('confirmation').innerHTML = rows.join('<br>') + `<hr><strong>Mode : ${serviceType}</strong><br><strong>Total : ${total} €</strong>`;
-  document.getElementById('modal').classList.add('show');
-  setTimeout(() => window.location.href = `mailto:mousmoussito@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, 250);
+document.getElementById('orderBtn').addEventListener('click',()=>{if(!selected.length)return;const labels={entree:'Entrée',plat:'Plat',dessert:'Dessert',boisson:'Boisson'};const rows=selected.map(v=>`${labels[v.group]} : ${v.name} — ${v.price} €`);const total=selected.reduce((a,v)=>a+v.price,0);const body=`Bonjour Chef !\n\nVoici ma commande au Mousmoussito Restaurant :\n\nMode : ${serviceType}\n\n${rows.join('\n')}\n\nTotal : ${total} €\n\nÀ bientôt ❤️`;const subject='Commande — Mousmoussito Restaurant';document.getElementById('confirmation').innerHTML=rows.join('<br>')+`<hr><strong>Mode : ${serviceType}</strong><br><strong>Total : ${total} €</strong>`;document.getElementById('modal').classList.add('show');setTimeout(()=>window.location.href=`mailto:mousmoussito@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,250);});
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+window.addEventListener('load',()=>document.body.classList.add('loaded'));
+
+// Choix du mode : fonctionne sur les 3 boutons.
+document.addEventListener('click', function (event) {
+  const button = event.target.closest('[data-service], .service-btn, .service-option');
+  if (!button) return;
+
+  const serviceChoice = document.getElementById('serviceChoice');
+  if (!serviceChoice) return;
+
+  const service =
+    button.dataset.service ||
+    button.getAttribute('data-mode') ||
+    button.textContent.trim();
+
+  if (!service) return;
+
+  window.serviceType = service;
+
+  serviceChoice.style.transition = 'opacity .45s ease';
+  serviceChoice.style.opacity = '0';
+
+  setTimeout(function () {
+    serviceChoice.remove();
+    document.body.classList.remove('waiting-for-mode');
+    document.body.classList.add('menu-ready');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 450);
 });
 
-function closeModal(){ document.getElementById('modal').classList.remove('show') }
-window.addEventListener('load', () => document.body.classList.add('loaded'));
 </script>
 </body>
 </html>
