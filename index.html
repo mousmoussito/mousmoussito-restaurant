@@ -27,9 +27,7 @@
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       margin: 0;
       font-family: Inter, "Segoe UI", Arial, sans-serif;
@@ -87,7 +85,7 @@
       overflow: hidden;
       background:
         linear-gradient(135deg, rgba(20, 14, 12, 0.78), rgba(98, 56, 40, 0.72)),
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900"><rect fill="%232d201d" width="1600" height="900"/><circle fill="%23c7945d" opacity="0.18" cx="1180" cy="120" r="250"/><circle fill="%23e9ceb0" opacity="0.12" cx="260" cy="740" r="300"/></svg>') center/cover no-repeat;
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900"><rect fill="%232d201d" width="1600" height="900"/><circle fill="%23c79f6d" cx="1180" cy="180" r="260" opacity="0.3"/><circle fill="%239f5a3d" cx="240" cy="760" r="300" opacity="0.25"/></svg>');
       color: white;
       padding-bottom: 34px;
     }
@@ -222,10 +220,7 @@
       gap: 8px;
     }
 
-    .hero-stats strong {
-      font-size: 1.1rem;
-      color: white;
-    }
+    .hero-stats strong { font-size: 1.1rem; color: white; }
 
     .hero-visual { display: flex; justify-content: center; }
 
@@ -447,7 +442,34 @@
       margin: 0;
     }
 
+    .menu-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 0 22px;
+    }
+
+    .menu-tab {
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.7);
+      color: var(--ink);
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .menu-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 12px 26px rgba(168, 90, 61, 0.18);
+    }
+
     .menu-grid { display: grid; gap: 18px; }
+
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
 
     .menu-section {
       background: rgba(255,255,255,0.7);
@@ -805,6 +827,66 @@
       font-size: 0.96rem;
     }
 
+    #serviceChoice {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(135deg,#3b2b25,#8d4b35 55%,#b47b45);
+      color: white;
+      text-align: center;
+    }
+
+    #serviceChoice.show {
+      display: grid;
+      animation: fadeIn 0.45s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .service-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .service-option {
+      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.08);
+      color: white;
+      border-radius: 22px;
+      padding: 25px 15px;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.25s ease;
+      font-size: 38px;
+      backdrop-filter: blur(8px);
+    }
+
+    .service-option:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,.18);
+    }
+
+    .service-option strong {
+      display: block;
+      font-size: 19px;
+      margin-top: 8px;
+    }
+
+    .service-option small {
+      display: block;
+      font-family: Arial;
+      font-size: 12px;
+      opacity: .75;
+      margin-top: 6px;
+    }
+
     @media (max-width: 980px) {
       .hero-grid,
       .story-grid,
@@ -824,6 +906,7 @@
       .menu-header, .order-row { flex-direction: column; align-items: stretch; }
       .btn-order, .btn { width: 100%; }
       .order-summary { white-space: normal; }
+      .service-options { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -962,229 +1045,272 @@
         <p class="menu-text">Des plats gourmands, un choix pensé pour la soirée, et un total clair à chaque instant.</p>
       </div>
 
+      <div class="menu-tabs" aria-label="Catégories du menu">
+        <button type="button" class="menu-tab active" data-target="entrees">Entrées</button>
+        <button type="button" class="menu-tab" data-target="plats">Plats</button>
+        <button type="button" class="menu-tab" data-target="desserts">Desserts</button>
+        <button type="button" class="menu-tab" data-target="boissons">Boissons</button>
+      </div>
+
       <div class="menu-grid">
-        <div class="menu-section">
-          <div class="menu-section-header">
-            <h3>🥗 Entrées</h3>
-            <div class="menu-line"></div>
-          </div>
-          <div class="items-grid">
-            <div class="item-card" data-group="entree" data-name="Salade gourmande" data-price="6">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🥗</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Salade gourmande</h4>
-                    <span class="item-price">6 €</span>
+        <div class="menu-panel active" id="entrees">
+          <div class="menu-section">
+            <div class="menu-section-header">
+              <h3>🥗 Entrées</h3>
+              <div class="menu-line"></div>
+            </div>
+            <div class="items-grid">
+              <div class="item-card" data-group="entrees" data-name="Salade gourmande" data-price="6">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🥗</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Salade gourmande</h4>
+                      <span class="item-price">6 €</span>
+                    </div>
+                    <p class="item-desc">Tomates fraîches, croûtons, fromage et sauce maison.</p>
                   </div>
-                  <p class="item-desc">Tomates fraîches, croûtons, fromage et sauce maison.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="entree" data-name="Œuf cocotte" data-price="7">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍳</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Œuf cocotte</h4>
-                    <span class="item-price">7 €</span>
+              <div class="item-card" data-group="entrees" data-name="Œuf cocotte" data-price="7">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍳</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Œuf cocotte</h4>
+                      <span class="item-price">7 €</span>
+                    </div>
+                    <p class="item-desc">Œuf fondant, crème légère et petites notes gourmandes.</p>
                   </div>
-                  <p class="item-desc">Œuf fondant, crème légère et petites notes gourmandes.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="entree" data-name="Planche apéro" data-price="8">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🧀</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Planche apéro</h4>
-                    <span class="item-price">8 €</span>
+              <div class="item-card" data-group="entrees" data-name="Planche apéro" data-price="8">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🧀</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Planche apéro</h4>
+                      <span class="item-price">8 €</span>
+                    </div>
+                    <p class="item-desc">Fromages, charcuterie, olives et pain grillé.</p>
                   </div>
-                  <p class="item-desc">Charcuterie, fromage et petites spécialités à partager.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="entree" data-name="Velouté du chef" data-price="6">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍲</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Velouté du chef</h4>
-                    <span class="item-price">6 €</span>
+              <div class="item-card" data-group="entrees" data-name="Soupe du jour" data-price="5">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🥘</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Soupe du jour</h4>
+                      <span class="item-price">5 €</span>
+                    </div>
+                    <p class="item-desc">Une soupe chaude, maison et généreuse.</p>
                   </div>
-                  <p class="item-desc">Soupe de saison, onctueuse et relevée de croûtons.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-section">
-          <div class="menu-section-header">
-            <h3>🍽️ Plats</h3>
-            <div class="menu-line"></div>
-          </div>
-          <div class="items-grid">
-            <div class="item-card" data-group="plat" data-name="Viande sauce maison" data-price="14">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🥩</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Viande sauce maison</h4>
-                    <span class="item-price">14 €</span>
-                  </div>
-                  <p class="item-desc">Viande cuite selon votre envie et sauce du chef.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="item-card" data-group="plat" data-name="Poisson du jour" data-price="15">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🐟</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Poisson du jour</h4>
-                    <span class="item-price">15 €</span>
-                  </div>
-                  <p class="item-desc">Poisson fondant, légumes et accompagnement du marché.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="item-card" data-group="plat" data-name="Pâtes crémeuses" data-price="12">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍝</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Pâtes crémeuses</h4>
-                    <span class="item-price">12 €</span>
-                  </div>
-                  <p class="item-desc">Pâtes généreuses, parmesan et crème veloutée.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="item-card" data-group="plat" data-name="Burger maison" data-price="13">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍔</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Burger maison</h4>
-                    <span class="item-price">13 €</span>
-                  </div>
-                  <p class="item-desc">Pain moelleux, steak, fromage et pommes maison.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="menu-section">
-          <div class="menu-section-header">
-            <h3>🍰 Desserts</h3>
-            <div class="menu-line"></div>
-          </div>
-          <div class="items-grid">
-            <div class="item-card" data-group="dessert" data-name="Fondant au chocolat" data-price="6">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍫</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Fondant au chocolat</h4>
-                    <span class="item-price">6 €</span>
+        <div class="menu-panel" id="plats">
+          <div class="menu-section">
+            <div class="menu-section-header">
+              <h3>🍽️ Plats</h3>
+              <div class="menu-line"></div>
+            </div>
+            <div class="items-grid">
+              <div class="item-card" data-group="plats" data-name="Burger maison" data-price="14">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍔</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Burger maison</h4>
+                      <span class="item-price">14 €</span>
+                    </div>
+                    <p class="item-desc">Boeuf, cheddar, salade et sauce maison.</p>
                   </div>
-                  <p class="item-desc">Cœur coulant, chocolat noir et petite touche salée.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="dessert" data-name="Glace gourmande" data-price="5">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🍨</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Glace gourmande</h4>
-                    <span class="item-price">5 €</span>
+              <div class="item-card" data-group="plats" data-name="Pâtes carbonara" data-price="16">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍝</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Pâtes carbonara</h4>
+                      <span class="item-price">16 €</span>
+                    </div>
+                    <p class="item-desc">Pâtes fraîches, crème, lardons et parmesan.</p>
                   </div>
-                  <p class="item-desc">Deux boules au choix avec petite gourmandise.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="dessert" data-name="Crêpes maison" data-price="6">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🥞</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Crêpes maison</h4>
-                    <span class="item-price">6 €</span>
+              <div class="item-card" data-group="plats" data-name="Filet de poulet" data-price="18">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍗</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Filet de poulet</h4>
+                      <span class="item-price">18 €</span>
+                    </div>
+                    <p class="item-desc">Poulet grillé, légumes et herbes aromatiques.</p>
                   </div>
-                  <p class="item-desc">Moelleuses et parfaites pour finir en douceur.</p>
                 </div>
               </div>
-            </div>
 
-            <div class="item-card" data-group="dessert" data-name="Dessert surprise" data-price="6">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🎁</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Dessert surprise</h4>
-                    <span class="item-price">6 €</span>
+              <div class="item-card" data-group="plats" data-name="Assiette chef" data-price="18">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🥘</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Assiette chef</h4>
+                      <span class="item-price">18 €</span>
+                    </div>
+                    <p class="item-desc">Viande, légumes et sauce maison du jour.</p>
                   </div>
-                  <p class="item-desc">Le chef choisit pour vous, toujours avec amour.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="menu-section">
-          <div class="menu-section-header">
-            <h3>🥤 Boissons</h3>
-            <div class="menu-line"></div>
-          </div>
-          <div class="items-grid">
-            <div class="item-card" data-group="boisson" data-name="Boisson fraîche" data-price="2">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">🥤</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Boisson fraîche</h4>
-                    <span class="item-price">2 €</span>
+        <div class="menu-panel" id="desserts">
+          <div class="menu-section">
+            <div class="menu-section-header">
+              <h3>🍰 Desserts</h3>
+              <div class="menu-line"></div>
+            </div>
+            <div class="items-grid">
+              <div class="item-card" data-group="desserts" data-name="Crème brûlée" data-price="6">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍮</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Crème brûlée</h4>
+                      <span class="item-price">6 €</span>
+                    </div>
+                    <p class="item-desc">Texture douce et caramel croustillant.</p>
                   </div>
-                  <p class="item-desc">Des boissons rafraîchissantes au choix du jour.</p>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="desserts" data-name="Tiramisu" data-price="7">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">☕</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Tiramisu</h4>
+                      <span class="item-price">7 €</span>
+                    </div>
+                    <p class="item-desc">Mascarpone, café et biscuit savoureux.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="desserts" data-name="Cheesecake" data-price="7">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍓</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Cheesecake</h4>
+                      <span class="item-price">7 €</span>
+                    </div>
+                    <p class="item-desc">Onctueux, léger et parfait à la fin du repas.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="desserts" data-name="Mousse au chocolat" data-price="6">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍫</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Mousse au chocolat</h4>
+                      <span class="item-price">6 €</span>
+                    </div>
+                    <p class="item-desc">Chocolat noir, riche et fondant.</p>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="item-card" data-group="boisson" data-name="Eau pétillante" data-price="1">
-              <div class="check">✓</div>
-              <div class="item-top">
-                <div class="item-emoji">💧</div>
-                <div class="item-copy">
-                  <div class="item-header">
-                    <h4 class="item-name">Eau pétillante</h4>
-                    <span class="item-price">1 €</span>
+        <div class="menu-panel" id="boissons">
+          <div class="menu-section">
+            <div class="menu-section-header">
+              <h3>🥤 Boissons</h3>
+              <div class="menu-line"></div>
+            </div>
+            <div class="items-grid">
+              <div class="item-card" data-group="boissons" data-name="Eau minérale" data-price="2">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">💧</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Eau minérale</h4>
+                      <span class="item-price">2 €</span>
+                    </div>
+                    <p class="item-desc">Fraîche et naturelle.</p>
                   </div>
-                  <p class="item-desc">Parfaite pour accompagner votre assiette.</p>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="boissons" data-name="Jus d'orange" data-price="4">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍊</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Jus d'orange</h4>
+                      <span class="item-price">4 €</span>
+                    </div>
+                    <p class="item-desc">Pressé et sans additif.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="boissons" data-name="Coca-Cola" data-price="3">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🥤</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Coca-Cola</h4>
+                      <span class="item-price">3 €</span>
+                    </div>
+                    <p class="item-desc">Classique et rafraîchissant.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-card" data-group="boissons" data-name="Limonade maison" data-price="4">
+                <div class="check">✓</div>
+                <div class="item-top">
+                  <div class="item-emoji">🍋</div>
+                  <div class="item-copy">
+                    <div class="item-header">
+                      <h4 class="item-name">Limonade maison</h4>
+                      <span class="item-price">4 €</span>
+                    </div>
+                    <p class="item-desc">Légère, citronnée et pétillante.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1195,12 +1321,10 @@
 
     <section class="testimonials container" id="avis">
       <div class="section-tag">Avis</div>
-      <h2 class="menu-section-title">Ce que nos clients disent</h2>
-
       <div class="testimonials-grid">
         <article class="quote">
           <div class="stars">★★★★★</div>
-          <p>“Une cuisine généreuse, une ambiance douce et une commande ultra simple. On a adoré.”</p>
+          <p>« Une vraie petite merveille. La cuisine est généreuse, le service est doux et les plats sont impeccables. »</p>
           <div class="person">
             <div class="person-badge">A</div>
             <span>Amélie</span>
@@ -1209,37 +1333,37 @@
 
         <article class="quote">
           <div class="stars">★★★★★</div>
-          <p>“Les plats sont très bien pensés et les saveurs sont vraiment présentes. Très bon concept.”</p>
+          <p>« Les saveurs sont justes, la présentation est belle et les portions tiennent la route. Très bonne adresse. »</p>
           <div class="person">
-            <div class="person-badge">L</div>
-            <span>Léo</span>
+            <div class="person-badge">S</div>
+            <span>Samir</span>
           </div>
         </article>
 
         <article class="quote">
           <div class="stars">★★★★★</div>
-          <p>“Le meilleur petit restaurant à domicile du quartier. On recommande sans hésiter.”</p>
+          <p>« J’ai commande pour le dîner et tout était parfait : rapide, bon et très agréable à partager. »</p>
           <div class="person">
-            <div class="person-badge">S</div>
-            <span>Sophie</span>
+            <div class="person-badge">N</div>
+            <span>Nadia</span>
           </div>
         </article>
       </div>
     </section>
 
     <section class="contact-block container" id="contact">
-      <div class="section-tag">Contact</div>
       <div class="contact-grid">
         <div>
-          <h2 class="contact-title">Une soirée, un dîner ou un repas à partager ?</h2>
-          <p class="lead">On vous accueille avec le sourire et on prépare tout avec soin pour que votre moment soit parfait.</p>
+          <div class="section-tag">Contact</div>
+          <h2 class="contact-title">Prêt à passer une bonne soirée ?</h2>
+          <p class="lead">Réservez votre table ou commandez votre repas directement depuis le site.</p>
 
           <div class="contact-list">
             <div class="contact-item">
               <div class="contact-icon">📍</div>
               <div>
                 <strong>Adresse</strong>
-                <span>12 rue des Saveurs, Paris</span>
+                <span>12 rue des Étoiles, Paris</span>
               </div>
             </div>
 
@@ -1247,7 +1371,7 @@
               <div class="contact-icon">📞</div>
               <div>
                 <strong>Téléphone</strong>
-                <span>+33 1 84 50 12 87</span>
+                <span>+33 1 23 45 67 89</span>
               </div>
             </div>
 
@@ -1255,23 +1379,24 @@
               <div class="contact-icon">🕒</div>
               <div>
                 <strong>Horaires</strong>
-                <span>Du mardi au dimanche · 12h - 22h30</span>
+                <span>Lun – Dim : 12h00 – 22h30</span>
               </div>
             </div>
           </div>
         </div>
 
         <div class="reservation-box">
-          <h3>Réservation</h3>
-          <p>Merci de nous contacter au moins 2h avant votre arrivée pour confirmer la préparation.</p>
+          <h3>Réservation rapide</h3>
+          <p>Une table pour un dîner entre amis ?</p>
 
           <div class="reservation-details">
-            <div class="reservation-row"><span>Service</span><strong>À domicile</strong></div>
-            <div class="reservation-row"><span>Délai moyen</span><strong>15 à 30 min</strong></div>
-            <div class="reservation-row"><span>Mode de commande</span><strong>Par mail</strong></div>
+            <div class="reservation-row"><span>Service</span><strong>Déjeuner</strong></div>
+            <div class="reservation-row"><span>Date</span><strong>Samedi</strong></div>
+            <div class="reservation-row"><span>Heure</span><strong>20h30</strong></div>
+            <div class="reservation-row"><span>Personnes</span><strong>4 personnes</strong></div>
           </div>
 
-          <a href="mailto:mousmoussito@gmail.com?subject=Reservation%20-%20Mousmoussito%20Restaurant" class="btn btn-primary" style="margin-top: 8px; width: 100%;">Réserver par mail</a>
+          <a class="btn btn-primary" href="#menu">Commander maintenant</a>
         </div>
       </div>
     </section>
@@ -1281,74 +1406,138 @@
     <div class="order-card">
       <div class="order-row">
         <div class="order-left">
-          <div class="order-label">Votre commande</div>
-          <div class="order-summary" id="summary">Choisissez au moins un plat pour commencer…</div>
+          <div class="order-label">Commande</div>
+          <div class="order-summary" id="orderSummary">Aucun plat sélectionné</div>
         </div>
-        <div class="order-total" id="total">Total : 0 €</div>
-        <button id="orderBtn" class="btn btn-order" disabled>Envoyer la commande</button>
+        <div class="order-total" id="orderTotal">0,00 €</div>
+        <button type="button" class="btn btn-order" id="orderButton" disabled>Commander</button>
       </div>
     </div>
   </div>
 
-  <footer>
-    Mousmoussito Restaurant · Cuisine de quartier · Fait avec amour ❤️
-  </footer>
+  <div id="serviceChoice" aria-modal="true" role="dialog">
+    <div class="container">
+      <div>
+        <div class="eyebrow">Choisir le service</div>
+        <h2 style="margin:20px 0 0; font-size: clamp(2rem, 5vw, 4rem); letter-spacing:-0.06em;">Comment souhaitez-vous profiter du restaurant ?</h2>
+      </div>
 
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-box">
-      <div class="big">👨‍🍳❤️</div>
-      <h2>Commande reçue !</h2>
-      <p>Merci pour votre commande. Le chef se met aux fourneaux.</p>
-      <div class="confirmation" id="confirmation"></div>
-      <button class="btn btn-primary" onclick="closeModal()" style="width: 100%;">Fermer</button>
+      <div class="service-options">
+        <button type="button" class="service-option" data-service="Livraison">
+          🚚
+          <strong>Livraison</strong>
+          <small>À domicile</small>
+        </button>
+        <button type="button" class="service-option" data-service="À emporter">
+          🛍️
+          <strong>À emporter</strong>
+          <small>Retrait rapide</small>
+        </button>
+        <button type="button" class="service-option" data-service="Sur place">
+          🍽️
+          <strong>Sur place</strong>
+          <small>À table</small>
+        </button>
+      </div>
     </div>
   </div>
 
-  <script>
-    const selected = {};
+  <div class="modal" id="confirmationModal" aria-modal="true" role="dialog">
+    <div class="modal-box">
+      <div class="big">✅</div>
+      <h2>Commande envoyée</h2>
+      <p>Votre demande a bien été enregistrée.</p>
+      <div class="confirmation" id="confirmationText"></div>
+      <button type="button" class="btn btn-primary" id="closeModal">Retour au menu</button>
+    </div>
+  </div>
 
-    document.querySelectorAll('.item-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const group = card.dataset.group;
-        document.querySelectorAll(`.item-card[data-group="${group}"]`).forEach(item => item.classList.remove('selected'));
-        card.classList.add('selected');
-        selected[group] = {
-          name: card.dataset.name,
-          price: Number(card.dataset.price)
-        };
-        updateSummary();
+  <footer>© 2026 Mousmoussito Restaurant — Cuisine maison &amp; service à l'écoute</footer>
+
+  <script>
+    const serviceChoice = document.getElementById('serviceChoice');
+    const selectedService = { value: 'Livraison' };
+    const selectedItems = new Map();
+    const menuTabs = document.querySelectorAll('.menu-tab');
+    const menuPanels = document.querySelectorAll('.menu-panel');
+    const itemCards = document.querySelectorAll('.item-card');
+    const orderSummary = document.getElementById('orderSummary');
+    const orderTotal = document.getElementById('orderTotal');
+    const orderButton = document.getElementById('orderButton');
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmationText = document.getElementById('confirmationText');
+    const closeModal = document.getElementById('closeModal');
+
+    function showServiceChoice() {
+      serviceChoice.classList.add('show');
+    }
+
+    function updateOrder() {
+      const entries = [...selectedItems.values()];
+      const total = entries.reduce((sum, item) => sum + Number(item.price), 0);
+      const names = entries.map(item => item.name);
+
+      orderSummary.textContent = names.length ? names.slice(0, 2).join(', ') + (names.length > 2 ? ' ...' : '') : 'Aucun plat sélectionné';
+      orderTotal.textContent = total.toFixed(2).replace('.', ',') + ' €';
+      orderButton.disabled = entries.length === 0;
+    }
+
+    menuTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.target;
+        menuTabs.forEach(btn => btn.classList.toggle('active', btn === tab));
+        menuPanels.forEach(panel => panel.classList.toggle('active', panel.id === target));
       });
     });
 
-    function updateSummary() {
-      const labels = { entree: 'Entrée', plat: 'Plat', dessert: 'Dessert', boisson: 'Boisson' };
-      const parts = Object.entries(selected).map(([group, value]) => `${labels[group]} : ${value.name}`);
-      const total = Object.values(selected).reduce((sum, item) => sum + item.price, 0);
+    itemCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const item = {
+          name: card.dataset.name,
+          price: Number(card.dataset.price)
+        };
 
-      document.getElementById('summary').textContent = parts.length ? parts.join(' · ') : 'Choisissez au moins un plat pour commencer…';
-      document.getElementById('total').textContent = `Total : ${total} €`;
-      document.getElementById('orderBtn').disabled = !selected.plat;
-    }
+        const key = `${item.name}-${item.price}`;
+        if (selectedItems.has(key)) {
+          selectedItems.delete(key);
+          card.classList.remove('selected');
+        } else {
+          selectedItems.set(key, item);
+          card.classList.add('selected');
+        }
 
-    document.getElementById('orderBtn').addEventListener('click', () => {
-      const labels = { entree: 'Entrée', plat: 'Plat', dessert: 'Dessert', boisson: 'Boisson' };
-      const rows = Object.entries(selected).map(([group, value]) => `${labels[group]} : ${value.name} — ${value.price} €`);
-      const total = Object.values(selected).reduce((sum, item) => sum + item.price, 0);
-
-      const body = `Bonjour Chef !\n\nVoici ma commande au Mousmoussito Restaurant :\n\n${rows.join('\n')}\n\nTotal : ${total} €\n\nÀ bientôt ❤️`;
-      const subject = 'Commande — Mousmoussito Restaurant';
-
-      window.location.href = `mailto:mousmoussito@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      document.getElementById('confirmation').innerHTML = rows.map(row => `${row}<br>`).join('') + `<hr><strong>Total : ${total} €</strong>`;
-      document.getElementById('modal').classList.add('show');
-      document.getElementById('modal').setAttribute('aria-hidden', 'false');
+        updateOrder();
+      });
     });
 
-    function closeModal() {
-      document.getElementById('modal').classList.remove('show');
-      document.getElementById('modal').setAttribute('aria-hidden', 'true');
-    }
+    document.querySelectorAll('.service-option').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedService.value = button.dataset.service;
+        serviceChoice.classList.remove('show');
+      });
+    });
+
+    orderButton.addEventListener('click', () => {
+      const entries = [...selectedItems.values()];
+      if (!entries.length) return;
+
+      const total = entries.reduce((sum, item) => sum + Number(item.price), 0);
+      confirmationText.innerHTML = `
+        <strong>Service :</strong> ${selectedService.value}<br>
+        <strong>Articles :</strong> ${entries.map(item => `${item.name} (${item.price} €)`).join('<br>')}<br>
+        <strong>Total :</strong> ${total.toFixed(2).replace('.', ',')} €
+      `;
+      confirmationModal.classList.add('show');
+    });
+
+    closeModal.addEventListener('click', () => {
+      confirmationModal.classList.remove('show');
+    });
+
+    window.addEventListener('load', () => {
+      showServiceChoice();
+      updateOrder();
+    });
   </script>
 </body>
 </html>
