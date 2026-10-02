@@ -174,9 +174,6 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
   </div>
 </div>
 
-
-</div>
-
 <header>
   <div class="logo">Restaurant privé · fait maison</div>
   <h1>Mousmoussito Restaurant</h1>
@@ -184,16 +181,12 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
   <div class="badge">MENU DU SOIR</div>
 </header>
 
-
-</div>
-
 <main>
   <div class="intro">
     <h2>Bienvenue à table</h2>
     <p>Installe-toi confortablement, choisis ce qui te fait envie et laisse le chef s'occuper du reste. Toutes les suggestions sont préparées avec amour.</p>
   </div>
 
-  
 <div class="menu-tabs" role="tablist" aria-label="Mode de repas">
 <button class="menu-tab active" data-tab="emporter" role="tab">🥡 À emporter</button>
 <button class="menu-tab" data-tab="surplace" role="tab">🍽️ Sur place</button>
@@ -204,12 +197,41 @@ button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(141,75,53,.22
 
 <section class="menu-panel active" data-panel="emporter">
 <div class="section-title"><h2>🥡 À emporter</h2><div class="line"></div></div>
-<div class="mode-placeholder"><div class="mode-placeholder-icon">🥡</div><h3>Menu à emporter</h3><p>Le menu spécifique à l'emporter sera ajouté ici.</p></div>
+<div class="grid">
+  <div class="item" data-group="entree" data-name="Salade gourmande" data-price="6">
+    <div class="item-top"><span class="emoji">🥗</span><div><h3>Salade gourmande</h3><p>Salade fraîche, tomates, croûtons, fromage et petite sauce maison.</p></div><span class="price">6 €</span></div>
+  </div>
+  <div class="item" data-group="plat" data-name="Viande sauce maison" data-price="14">
+    <div class="item-top"><span class="emoji">🥩</span><div><h3>Viande sauce maison</h3><p>Viande cuite selon ton envie, accompagnement du jour et sauce du chef.</p></div><span class="price">14 €</span></div>
+  </div>
+  <div class="item" data-group="plat" data-name="Poisson du jour" data-price="15">
+    <div class="item-top"><span class="emoji">🐟</span><div><h3>Poisson du jour</h3><p>Poisson fondant, légumes de saison et accompagnement maison.</p></div><span class="price">15 €</span></div>
+  </div>
+  <div class="item" data-group="dessert" data-name="Fondant au chocolat" data-price="6">
+    <div class="item-top"><span class="emoji">🍫</span><div><h3>Fondant au chocolat</h3><p>Chocolat intense, cœur coulant et petite touche gourmande.</p></div><span class="price">6 €</span></div>
+  </div>
+  <div class="item" data-group="boisson" data-name="Boisson fraîche" data-price="2">
+    <div class="item-top"><span class="emoji">🥤</span><div><h3>Boisson fraîche</h3><p>Au choix parmi les boissons disponibles.</p></div><span class="price">2 €</span></div>
+  </div>
+</div>
 </section>
 
 <section class="menu-panel" data-panel="surplace">
 <div class="section-title"><h2>🍽️ Sur place</h2><div class="line"></div></div>
-<div class="mode-placeholder"><div class="mode-placeholder-icon">🍽️</div><h3>Menu sur place</h3><p>Le menu spécifique au sur place sera ajouté ici.</p></div>
+<div class="grid">
+  <div class="item" data-group="entree" data-name="Planche apéro" data-price="8">
+    <div class="item-top"><span class="emoji">🧀</span><div><h3>Planche apéro</h3><p>Fromage, charcuterie et petites gourmandises à partager.</p></div><span class="price">8 €</span></div>
+  </div>
+  <div class="item" data-group="plat" data-name="Burger maison" data-price="13">
+    <div class="item-top"><span class="emoji">🍔</span><div><h3>Burger maison</h3><p>Pain moelleux, steak, fromage, sauce maison et pommes de terre.</p></div><span class="price">13 €</span></div>
+  </div>
+  <div class="item" data-group="plat" data-name="Pâtes crémeuses" data-price="12">
+    <div class="item-top"><span class="emoji">🍝</span><div><h3>Pâtes crémeuses</h3><p>Pâtes généreuses, sauce crémeuse et parmesan.</p></div><span class="price">12 €</span></div>
+  </div>
+  <div class="item" data-group="dessert" data-name="Crêpes maison" data-price="6">
+    <div class="item-top"><span class="emoji">🥞</span><div><h3>Crêpes maison</h3><p>Crêpes moelleuses, sucre, chocolat ou confiture.</p></div><span class="price">6 €</span></div>
+  </div>
+</div>
 </section>
 
 <section class="menu-panel" data-panel="sortie">
@@ -276,6 +298,24 @@ setTimeout(() => {
 document.querySelectorAll('.service-option').forEach(option => {
   option.addEventListener('click', () => {
     serviceType = option.dataset.service;
+
+    const tabMap = {
+      'À emporter': 'emporter',
+      'Sur place': 'surplace',
+      'Sortie': 'sortie'
+    };
+
+    const targetTab = tabMap[serviceType];
+    const targetButton = document.querySelector(`.menu-tab[data-tab="${targetTab}"]`);
+
+    if (targetButton) {
+      document.querySelectorAll('.menu-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(panel => panel.classList.remove('active'));
+      targetButton.classList.add('active');
+      const targetPanel = document.querySelector(`.menu-panel[data-panel="${targetTab}"]`);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
     serviceScreen.style.transition = 'opacity .45s ease';
     serviceScreen.style.opacity = '0';
     setTimeout(() => {
